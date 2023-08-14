@@ -1,62 +1,48 @@
 class Solution {
 public:
-    string shortestCommonSupersequence(string s1, string s2){
+    string shortestCommonSupersequence(string str1, string str2) {
+        int s = str1.size();
+        int t = str2.size();
+        vector<vector<int>>dp(s+1,vector<int>(t+1,0));
+        for(int i=1;i<=s;i++)
+        {
+            for(int j=1;j<=t;j++)
+            {
+                if(str1[i-1]==str2[j-1])
+                dp[i][j]= 1 + dp[i-1][j-1];
+                else{
+                    dp[i][j] = max(dp[i-1][j],dp[i][j-1]);
+                }
+            }
+        }
+        string ans ="";
+        int i=s,j=t;
+        while(i>0 and j>0)
+        {
+            if(str1[i-1]==str2[j-1])
+            {
+                ans += str1[i-1];
+                i--;
+                j--;
+            }
+            else if(dp[i-1][j]>dp[i][j-1])
+            {
+                ans += str1[i-1];
+                i--;
+            }
+            else 
+            {
+                ans += str2[j-1];
+                j--;
+            }
+        }
+        while(i>=1)
+        {ans += str1[i-1];
+        i--;}
+        while(j>=1)
+        {ans += str2[j-1];j--;}
 
-  int n = s1.size();
-  int m = s2.size();
-
-  vector < vector < int >> dp(n + 1, vector < int > (m + 1, 0));
-  for (int i = 0; i <= n; i++) {
-    dp[i][0] = 0;
-  }
-  for (int i = 0; i <= m; i++) {
-    dp[0][i] = 0;
-  }
-
-  for (int ind1 = 1; ind1 <= n; ind1++) {
-    for (int ind2 = 1; ind2 <= m; ind2++) {
-      if (s1[ind1 - 1] == s2[ind2 - 1])
-        dp[ind1][ind2] = 1 + dp[ind1 - 1][ind2 - 1];
-      else
-        dp[ind1][ind2] = 0 + max(dp[ind1 - 1][ind2], dp[ind1][ind2 - 1]);
+    reverse(ans.begin(),ans.end());
+    return ans;
     }
-  }
-
-  int len = dp[n][m];
-  int i = n;
-  int j = m;
-
-  int index = len - 1;
-  string ans = "";
-
-  while (i > 0 && j > 0) {
-    if (s1[i - 1] == s2[j - 1]) {
-      ans += s1[i-1];
-      index--;
-      i--;
-      j--;
-    } else if (dp[i - 1][j] > dp[i][j - 1]) {
-        ans += s1[i-1];
-        i--;
-    } else {
-        ans += s2[j-1];
-        j--;
-    }
-  }
-  
-  //Adding Remaing Characters - Only one of the below two while loops will run 
-  
-  while(i>0){
-      ans += s1[i-1];
-      i--;
-  }
-  while(j>0){
-      ans += s2[j-1];
-      j--;
-  }
-
-  reverse(ans.begin(),ans.end());
-  
-  return ans;
-}
 };

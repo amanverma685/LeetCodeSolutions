@@ -20,12 +20,6 @@ public:
             int pce= pq.front().second.second;
             int stops = pq.front().first;
             pq.pop();
-
-            if(node==dst and stops<=k)
-            {
-                ans = min(pce,ans);
-            }
-
             for(auto it: adj[node])
             {
                 int newP = it.second;
